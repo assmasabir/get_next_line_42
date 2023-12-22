@@ -24,7 +24,7 @@ size_t	ft_strlen(const char *str)
 	}
 	return (i);
 }
-static char	*allocate(char const *s1, char const *s2)
+char	*allocate(char const *s1, char const *s2)
 {
 	int		len;
 	char	*res;
@@ -63,3 +63,30 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	res[i] = '\0';
 	return (res);
 }
+void	ft_bzero(void *s, size_t n)
+{
+	unsigned char	*p;
+	size_t			i;
+
+	p = (unsigned char *)s;
+	i = 0;
+	while (i < n)
+	{
+		p[i++] = '\0';
+	}
+}
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	size_t	total_size;
+	void	*str;
+
+	if (size != 0 && nmemb > __SIZE_MAX__ / size)
+		return (NULL);
+	total_size = nmemb * size;
+	str = (void *)malloc(total_size);
+	if (str == NULL)
+		return (NULL);
+	ft_bzero(str, total_size);
+	return (str);
+}
+
