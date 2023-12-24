@@ -2,7 +2,13 @@
 
 #define BUFFER_SIZE 100
 
-
+char *free_and_join(char* reserve, char* buff)
+{
+    char *temp;
+    temp = ft_strjoin(reserve, buff);
+    free(reserve);
+    return(temp);
+}
 
 char *read_and_join(int fd, char *reserve, int *j)
 {
@@ -20,15 +26,16 @@ char *read_and_join(int fd, char *reserve, int *j)
     while ((res = read(fd, buff, BUFFER_SIZE)) > 0)
     {
         buff[res] = '\0';
-        reserve= ft_strjoin(reserve,buff);
-
+        reserve= free_and_join(reserve,buff);
         if (ft_strchr(buff, '\n') != 0)
             break;
     }
+    free(buff);
     if (res == -1 || (res == 0 && *j == 0 && reserve[*j] == '\0'))
         return (NULL);
     return (reserve);
 }
+
 char *allocate_and_copy(char *reserve, int *j)
 {
     char *temp;
@@ -53,31 +60,17 @@ char *allocate_and_copy(char *reserve, int *j)
 }
 char *update_reserve(char *reserve, int j)
 {
-    int i;
     int len;
     char *temp;
 
     if (reserve[j] != '\0')
     {   
         len = ft_strlen(reserve+j);
-        temp = (char *)malloc(sizeof(char) * (len+1));
-        i = 0;
-        while (reserve[j] != '\0')
-        {
-            temp[i] = reserve[j];
-            i++;
-            j++;
-        }
-        temp[i] = '\0';
+        temp = (char *)malloc(sizeof(char) * (len+1));  
+        temp = ft_strcpy(temp, reserve + j);
         free(reserve);
-        reserve = (char *)malloc(sizeof(char) * (len+1));
-        i = 0;
-        while (temp[i] != '\0')
-        {
-            reserve[i] = temp[i];
-            i++;
-        }
-        reserve[i] = '\0';
+        reserve = (char *)malloc(sizeof(char) * (len+1));  
+        reserve = ft_strcpy(reserve, temp);
         free(temp);
     }
     else
@@ -87,6 +80,7 @@ char *update_reserve(char *reserve, int j)
     }
     return (reserve);
 }
+
 char *get_next_line(int fd)
 {  
     char *temp;
@@ -96,7 +90,7 @@ char *get_next_line(int fd)
  
     reserve = read_and_join(fd,reserve,&j);
     if (reserve == NULL)
-        return "allo";
+        return (NULL);
 
 
    temp = allocate_and_copy (reserve,&j);
@@ -117,7 +111,10 @@ int main()
     printf("%s", get_next_line(fd));
     printf("%s", get_next_line(fd));
     printf("%s", get_next_line(fd));
-    printf("%s", get_next_line(fd));printf("%s", get_next_line(fd));printf("%s", get_next_line(fd));
+    printf("%s", get_next_line(fd));
+    printf("%s", get_next_line(fd));
+    printf("%s", get_next_line(fd));
+    
 
     close(fd);
 }
