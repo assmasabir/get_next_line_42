@@ -1,100 +1,109 @@
 #include "get_next_line.h"
 
+#define BUFFER_SIZE 100
 
 
 
-
-char *get_next_line(int fd)
+char *read_and_join(int fd, char *reserve, int *j)
 {
     ssize_t res;
-    static char *buff;
-    size_t size = 100;
-    int i;
-    char *temp;
-    int j;
-    static char *reserve;
+    char *buff;
+     *j = 0;
 
- 
-    j = 0;
-
-    if (buff == NULL)
-        buff = (char *)malloc(sizeof(char) * (size+1));
-
+    buff = (char *)malloc(sizeof(char) * (BUFFER_SIZE+1));
     if (reserve == NULL)
         reserve = ft_calloc(1, 1);
     else
-    {
-        while (reserve[j] != '\0')
-        {
-            j++;
-        }
-    }
-
+     *j = ft_strlen(reserve);
     if (buff == NULL || reserve == NULL)
         return NULL;
-
-    while ((res = read(fd, buff, size)) > 0)
+    while ((res = read(fd, buff, BUFFER_SIZE)) > 0)
     {
         buff[res] = '\0';
-        i = 0;
         reserve= ft_strjoin(reserve,buff);
 
         if (ft_strchr(buff, '\n') != 0)
             break;
     }
-
-    if (res == -1 || (res == 0 && j == 0 && reserve[j] == '\0'))
+    if (res == -1 || (res == 0 && *j == 0 && reserve[*j] == '\0'))
         return (NULL);
-
-    temp = (char *)malloc(sizeof(char) * (j + 1));
-
+    return (reserve);
+}
+char *allocate_and_copy(char *reserve, int *j)
+{
+    char *temp;
+    
+    temp = (char *)malloc(sizeof(char) * (*j + 1));
     if (temp == NULL)
         return NULL;
 
-    j = 0;
-    while (reserve[j] != '\0')
+    *j = 0;
+    while (reserve[*j] != '\0')
     {
-        temp[j] = reserve[j];
-        if (reserve[j] == '\n')
+        temp[*j] = reserve[*j];
+        if (reserve[*j] == '\n')
         {
-            j++;
+            (*j)++;
             break;
         }
-        j++;
+        (*j)++;
     }
-    temp[j] = '\0';
+    temp[*j] = '\0';
+    return temp; 
+}
+char *update_reserve(char *reserve, int j)
+{
+    int i;
+    int len;
+    char *temp;
+
     if (reserve[j] != '\0')
-    {
-        int len = ft_strlen(reserve+j);
-        char *t = (char *)malloc(sizeof(char) * (len+1));
+    {   
+        len = ft_strlen(reserve+j);
+        temp = (char *)malloc(sizeof(char) * (len+1));
         i = 0;
         while (reserve[j] != '\0')
         {
-            t[i] = reserve[j];
+            temp[i] = reserve[j];
             i++;
             j++;
         }
-        t[i] = '\0';
+        temp[i] = '\0';
         free(reserve);
         reserve = (char *)malloc(sizeof(char) * (len+1));
         i = 0;
-        while (t[i] != '\0')
+        while (temp[i] != '\0')
         {
-            reserve[i] = t[i];
+            reserve[i] = temp[i];
             i++;
         }
         reserve[i] = '\0';
-        free(t);
+        free(temp);
     }
     else
     {
         free(reserve);
         reserve = NULL;
     }
-
-    return temp;
+    return (reserve);
 }
+char *get_next_line(int fd)
+{  
+    char *temp;
+    int j =0;
+    static char *reserve;
 
+ 
+    reserve = read_and_join(fd,reserve,&j);
+    if (reserve == NULL)
+        return "allo";
+
+
+   temp = allocate_and_copy (reserve,&j);
+
+    reserve = update_reserve(reserve,j);
+    return (temp);
+}
 
 int main()
 {
