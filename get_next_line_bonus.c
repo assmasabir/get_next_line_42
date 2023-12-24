@@ -1,7 +1,6 @@
 
 #include "get_next_line.h"
 
-#define BUFFER_SIZE 100
 
 char	*free_and_join(char *reserve, char *buff)
 {
@@ -34,7 +33,10 @@ char	*read_and_join(int fd, char *reserve, int *j)
 	}
 	free(buff);
 	if (res == -1 || (res == 0 && *j == 0 && reserve[*j] == '\0'))
+	{
+		free(reserve);
 		return (NULL);
+	}
 	return (reserve);
 }
 

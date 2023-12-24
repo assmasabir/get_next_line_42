@@ -6,14 +6,14 @@
 /*   By: asabir <asabir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 19:01:05 by asabir            #+#    #+#             */
-/*   Updated: 2023/12/24 21:11:17 by asabir           ###   ########.fr       */
+/*   Updated: 2023/12/25 00:27:29 by asabir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "get_next_line.h"
 
-#define BUFFER_SIZE 100
+
 
 char	*free_and_join(char *reserve, char *buff)
 {
@@ -46,7 +46,11 @@ char	*read_and_join(int fd, char *reserve, int *j)
 	}
 	free(buff);
 	if (res == -1 || (res == 0 && *j == 0 && reserve[*j] == '\0'))
+	{
+		free(reserve);
 		return (NULL);
+	}
+		
 	return (reserve);
 }
 
@@ -83,6 +87,7 @@ char	*update_reserve(char *reserve, int j)
 		temp = ft_strcpy(temp, reserve + j);
 		free(reserve);
 		reserve = (char *)malloc(sizeof(char) * (len + 1));
+		
 		reserve = ft_strcpy(reserve, temp);
 		free(temp);
 	}
@@ -105,6 +110,8 @@ char	*get_next_line(int fd)
 	if (reserve == NULL)
 		return (NULL);
 	temp = allocate_and_copy(reserve, &j);
+	if (temp == NULL)
+		return (NULL);
 	reserve = update_reserve(reserve, j);
 	return (temp);
 }
@@ -116,15 +123,20 @@ char	*get_next_line(int fd)
 // 	{
 // 		return (1);
 // 	}
-
+// 	char * c = get_next_line(fd);
+// 	char * b = get_next_line(fd);
+// 	char * a = get_next_line(fd);
+// 	printf("%s", c);
+// 	printf("%s", b);
+// 	printf("%s", a);
 // 	printf("%s", get_next_line(fd));
 // 	printf("%s", get_next_line(fd));
 // 	printf("%s", get_next_line(fd));
 // 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-//     system("leaks a.out");
-
+// 	//system("leaks a.out");
 // 	close(fd);
+// 	free(c);
+// 	free(b);
+// 	free(a);
+// 	system("leaks a.out");
 // }
