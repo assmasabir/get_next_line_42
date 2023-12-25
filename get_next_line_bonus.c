@@ -7,6 +7,8 @@ char	*free_and_join(char *reserve, char *buff)
 	char	*temp;
 
 	temp = ft_strjoin(reserve, buff);
+	if (temp == NULL)
+		return (NULL);
 	free(reserve);
 	return (temp);
 }
@@ -70,9 +72,16 @@ char	*update_reserve(char *reserve, int j)
 	{
 		len = ft_strlen(reserve + j);
 		temp = (char *)malloc(sizeof(char) * (len + 1));
+		if(temp == NULL)
+			return (NULL);
 		temp = ft_strcpy(temp, reserve + j);
 		free(reserve);
 		reserve = (char *)malloc(sizeof(char) * (len + 1));
+		if (reserve == NULL) 
+		{
+            free(temp);
+            return NULL;
+        }
 		reserve = ft_strcpy(reserve, temp);
 		free(temp);
 	}

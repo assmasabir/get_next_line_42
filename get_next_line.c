@@ -6,7 +6,7 @@
 /*   By: asabir <asabir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 19:01:05 by asabir            #+#    #+#             */
-/*   Updated: 2023/12/25 00:27:29 by asabir           ###   ########.fr       */
+/*   Updated: 2023/12/25 00:57:40 by asabir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ char	*free_and_join(char *reserve, char *buff)
 
 	temp = ft_strjoin(reserve, buff);
 	free(reserve);
+	if (temp == NULL)
+		return (NULL);
 	return (temp);
 }
 
@@ -84,10 +86,16 @@ char	*update_reserve(char *reserve, int j)
 	{
 		len = ft_strlen(reserve + j);
 		temp = (char *)malloc(sizeof(char) * (len + 1));
+		if(temp == NULL)
+			return (NULL);
 		temp = ft_strcpy(temp, reserve + j);
 		free(reserve);
 		reserve = (char *)malloc(sizeof(char) * (len + 1));
-		
+		if (reserve == NULL) 
+		{
+            free(temp);
+            return NULL;
+        }
 		reserve = ft_strcpy(reserve, temp);
 		free(temp);
 	}
@@ -110,8 +118,6 @@ char	*get_next_line(int fd)
 	if (reserve == NULL)
 		return (NULL);
 	temp = allocate_and_copy(reserve, &j);
-	if (temp == NULL)
-		return (NULL);
 	reserve = update_reserve(reserve, j);
 	return (temp);
 }

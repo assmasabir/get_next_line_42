@@ -33,6 +33,8 @@ char	*allocate(char const *s1, char const *s2)
 		return (NULL);
 	len = ft_strlen((const char *)s1) + ft_strlen((const char *)s2);
 	res = (char *)malloc((len + 1) * sizeof(char));
+	if(res == NULL)
+		return (NULL);
 	return (res);
 }
 
