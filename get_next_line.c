@@ -6,21 +6,21 @@
 /*   By: asabir <asabir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 19:01:05 by asabir            #+#    #+#             */
-/*   Updated: 2023/12/26 19:21:58 by asabir           ###   ########.fr       */
+/*   Updated: 2023/12/27 00:32:28 by asabir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-#include "get_next_line.h"
+#include "get_next_line.h" 
 
 
 
-char	*free_and_join(char *reserve, char *buff)
+char	*free_and_join(char **reserve, char *buff)
 {
 	char	*temp;
 
-	temp = ft_strjoin(reserve, buff);
-	free(reserve);
+	temp = ft_strjoin(*reserve, buff);
+	free(*reserve);
 	if (temp == NULL)
 		return (NULL);
 	return (temp);
@@ -32,7 +32,7 @@ char	*read_and_join(int fd, char **reserve, int *j)
 	char	*buff;
 
 	*j = 0;
-	buff = (char *)malloc(BUFFER_SIZE * sizeof(char) + 1);
+	buff = (char *)malloc((size_t)BUFFER_SIZE + 1);
 	if (buff == NULL)
 	{
 		if (*reserve != NULL)
@@ -50,7 +50,7 @@ char	*read_and_join(int fd, char **reserve, int *j)
 	while ((res = read(fd, buff, BUFFER_SIZE)) > 0)
 	{
 		buff[res] = '\0';
-		*reserve = free_and_join(*reserve, buff);
+		*reserve = free_and_join(reserve, buff);
 		if (ft_strchr(buff, '\n') != 0)
 			break ;
 	}
@@ -90,13 +90,13 @@ char	*update_reserve(char **reserve, int j)
 	int		len;
 	char	*temp;
 
-	if (reserve[j] != '\0')
+	if ((*reserve)[j] != '\0')
 	{
-		len = ft_strlen(*(reserve + j));
+		len = ft_strlen(*reserve + j);
 		temp = (char *)malloc(sizeof(char) * (len + 1));
 		if(temp == NULL)
 			return (NULL);
-		temp = ft_strcpy(temp, *(reserve + j));
+		temp = ft_strcpy(temp, *reserve + j);
 		free(*reserve);
 		*reserve = (char *)malloc(sizeof(char) * (len + 1));
 		if (*reserve == NULL) 
@@ -121,9 +121,10 @@ char	*get_next_line(int fd)
 	int			j;
 	static char	*reserve;
 
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
 	j = 0;
 	reserve = read_and_join(fd, &reserve, &j);
-
 	if (reserve == NULL)
 		return (NULL);
 	temp = allocate_and_copy(reserve, &j);
@@ -155,4 +156,23 @@ char	*get_next_line(int fd)
 // 	free(c);
 // 	free(b);
 // 	free(a);
+// }
+
+
+// #include<stdio.h>
+// #include<fcntl.h>
+
+// int main()
+// {
+// 	int fd = open("test", O_RDONLY);
+// 	char *str;
+// 	while (1)
+// 	{
+// 		str = get_next_line(fd);
+// 		printf("%s", str);
+// 		free(str);
+// 		if (!str)
+// 			break;
+// 	}
+// 	system("leaks a.out");
 // }
