@@ -6,11 +6,12 @@
 /*   By: asabir <asabir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 01:13:16 by asabir            #+#    #+#             */
-/*   Updated: 2023/12/28 02:34:38 by asabir           ###   ########.fr       */
+/*   Updated: 2023/12/28 17:44:46 by asabir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
 char	*free_and_join(char **reserve, char *buff)
 {
 	char	*temp;
@@ -64,28 +65,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	ft_strcpy(res, s1);
 	ft_strcpy(res + len1, s2);
 	return (res);
-}
-
-void	*ft_calloc(size_t nmemb, size_t size)
-{
-	size_t			total_size;
-	void			*str;
-	unsigned char	*p;
-	size_t			i;
-
-	if (size != 0 && nmemb > __SIZE_MAX__ / size)
-		return (NULL);
-	total_size = nmemb * size;
-	str = (void *)malloc(total_size);
-	if (str == NULL)
-		return (NULL);
-	p = (unsigned char *)str;
-	i = 0;
-	while (i < total_size)
-	{
-		p[i++] = '\0';
-	}
-	return (str);
 }
 
 char	*ft_strcpy(char *dest, const char *src)

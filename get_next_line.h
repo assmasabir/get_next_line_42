@@ -1,16 +1,30 @@
-#include <unistd.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: asabir <asabir@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/28 17:42:55 by asabir            #+#    #+#             */
+/*   Updated: 2023/12/28 17:49:43 by asabir           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#ifndef BUFFER_SIZE 
-#define BUFFER_SIZE 1000
-#endif
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-char *get_next_line(int fd);
+# include <fcntl.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 100
+# endif
+
+char	*get_next_line(int fd);
 size_t	ft_strlen(const char *str);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strchr(const char *s, int c);
-char *ft_strcpy(char *dest, const char *src);
+char	*ft_strcpy(char *dest, const char *src);
 char	*free_and_join(char **reserve, char *buff);
-// void	*ft_calloc(size_t nmemb, size_t size);
+#endif
