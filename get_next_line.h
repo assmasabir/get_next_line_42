@@ -6,7 +6,7 @@
 /*   By: asabir <asabir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 17:42:55 by asabir            #+#    #+#             */
-/*   Updated: 2023/12/28 17:49:43 by asabir           ###   ########.fr       */
+/*   Updated: 2023/12/29 18:00:09 by asabir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 100
+#  define BUFFER_SIZE  10000000
 # endif
 
 char	*get_next_line(int fd);

@@ -6,7 +6,7 @@
 /*   By: asabir <asabir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 19:01:05 by asabir            #+#    #+#             */
-/*   Updated: 2023/12/28 17:17:59 by asabir           ###   ########.fr       */
+/*   Updated: 2023/12/29 22:20:20 by asabir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*read_and_join(int fd, char **reserve, int *j)
 			break ;
 	}
 	free(buff);
-	if (res == -1 || (res == 0 && *j == 0 && *(reserve[*j]) == '\0'))
+	if (res == -1 || (res == 0 && *(reserve[0]) == '\0'))
 	{
 		free(*reserve);
 		return (NULL);
@@ -133,38 +133,6 @@ char	*get_next_line(int fd)
 	reserve = update_reserve(&reserve, j, len);
 	return (temp);
 }
-
-// int	main(void)
-// {
-// 	int		fd;
-// 	char	*c;
-// 	char	*b;
-// 	char	*a;
-
-// 	fd = open("example.txt", O_CREAT | O_RDWR, 777);
-// 	if (fd == -1)
-// 	{
-// 		return (1);
-// 	}
-// 	c = get_next_line(fd);
-// 	b = get_next_line(fd);
-// 	a = get_next_line(fd);
-// 	printf("%s", c);
-// 	printf("%s", b);
-// 	printf("%s", a);
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	// system("leaks a.out");
-// 	close(fd);
-// 	free(c);
-// 	free(b);
-// 	free(a);
-// }
-
-// #include<stdio.h>
-// #include<fcntl.h>
 
 // int main()
 // {
