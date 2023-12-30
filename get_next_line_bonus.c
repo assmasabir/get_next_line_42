@@ -6,17 +6,16 @@
 /*   By: asabir <asabir@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 17:42:36 by asabir            #+#    #+#             */
-/*   Updated: 2023/12/28 17:42:38 by asabir           ###   ########.fr       */
+/*   Updated: 2023/12/30 17:11:58 by asabir           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*read_and_join_helper(char **reserve, int *j)
+char	*read_and_join_helper(char **reserve)
 {
 	char	*buff;
 
-	*j = 0;
 	buff = (char *)malloc((size_t)BUFFER_SIZE + 1);
 	if (buff == NULL)
 	{
@@ -31,34 +30,33 @@ char	*read_and_join_helper(char **reserve, int *j)
 			return (NULL);
 		(*reserve)[0] = '\0';
 	}
-	else
-		*j = ft_strlen(*reserve);
 	return (buff);
 }
 
-char	*read_and_join(int fd, char **reserve, int *j)
+char	*read_and_join(int fd, char **reserve)
 {
 	ssize_t	res;
 	char	*buff;
 
-	buff = read_and_join_helper(reserve, j);
+	buff = read_and_join_helper(reserve);
 	if (buff == NULL)
 		return (NULL);
 	res = 1;
 	while (res > 0)
 	{
 		res = read(fd, buff, BUFFER_SIZE);
+		if (res == -1 || (res == 0 && *(reserve[0]) == '\0'))
+		{
+			free(buff);
+			free(*reserve);
+			return (NULL);
+		}
 		buff[res] = '\0';
 		*reserve = free_and_join(reserve, buff);
 		if (ft_strchr(buff, '\n') != 0)
 			break ;
 	}
 	free(buff);
-	if (res == -1 || (res == 0 && *j == 0 && *(reserve[*j]) == '\0'))
-	{
-		free(*reserve);
-		return (NULL);
-	}
 	return (*reserve);
 }
 
@@ -124,9 +122,10 @@ char	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	j = 0;
-	reserve[fd] = read_and_join(fd, &reserve[fd], &j);
+	reserve[fd] = read_and_join(fd, &reserve[fd]);
 	if (reserve[fd] == NULL)
 		return (NULL);
+	j = ft_strlen(reserve);
 	temp = allocate_and_copy(reserve[fd], &j);
 	if (temp == NULL)
 		return (NULL);
